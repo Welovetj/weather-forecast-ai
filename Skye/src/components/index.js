@@ -1,5 +1,5 @@
 // Components barrel export
 export { default as WeatherCard } from './WeatherCard';
-export { default as ForecastList } from './ForecastList';
-export { default as LoadingSpinner } from './LoadingSpinner';
-export { default as ErrorMessage } from './ErrorMessage';
+export { default as UnitToggle } from './UnitToggle';
+export { default as SearchBar } from './SearchBar';
+export { default as ForecastStrip } from './ForecastStrip';

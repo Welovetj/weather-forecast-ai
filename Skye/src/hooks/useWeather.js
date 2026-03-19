@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { OPENWEATHER_API_KEY } from '@env';
 import {
-  WEATHER_API_KEY,
   WEATHER_API_URL,
   FORECAST_API_URL,
   API_TIMEOUT,
@@ -16,16 +16,28 @@ const useWeather = (city, units = 'metric') => {
   const [forecastData, setForecastData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const normalizedUnits = units === 'imperial' ? 'imperial' : 'metric';
 
   useEffect(() => {
     let isMounted = true;
+    const controller = new AbortController();
 
     const fetchWeather = async () => {
       if (!city || !city.trim()) {
         if (isMounted) {
           setWeatherData(null);
           setForecastData(null);
-          setError('City name is required');
+          setError(null);
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (!OPENWEATHER_API_KEY || OPENWEATHER_API_KEY === 'YOUR_API_KEY_HERE') {
+        if (isMounted) {
+          setWeatherData(null);
+          setForecastData(null);
+          setError('OpenWeather API key is missing. Set OPENWEATHER_API_KEY in .env.');
           setLoading(false);
         }
         return;
@@ -39,18 +51,20 @@ const useWeather = (city, units = 'metric') => {
 
         const params = {
           q: city.trim(),
-          appid: WEATHER_API_KEY,
-          units,
+          appid: OPENWEATHER_API_KEY,
+          units: normalizedUnits,
         };
 
         const [weatherResponse, forecastResponse] = await Promise.all([
           axios.get(WEATHER_API_URL, {
             params,
             timeout: API_TIMEOUT,
+            signal: controller.signal,
           }),
           axios.get(FORECAST_API_URL, {
             params,
             timeout: API_TIMEOUT,
+            signal: controller.signal,
           }),
         ]);
 
@@ -59,6 +73,10 @@ const useWeather = (city, units = 'metric') => {
           setForecastData(forecastResponse.data);
         }
       } catch (err) {
+        if (controller.signal.aborted || err.name === 'CanceledError' || err.code === 'ERR_CANCELED') {
+          return;
+        }
+
         if (isMounted) {
           setError(err.response?.data?.message || err.message || 'Failed to fetch weather data');
           setWeatherData(null);
@@ -71,12 +89,14 @@ const useWeather = (city, units = 'metric') => {
       }
     };
 
-    fetchWeather();
+    const debounceId = setTimeout(fetchWeather, 350);
 
     return () => {
       isMounted = false;
+      clearTimeout(debounceId);
+      controller.abort();
     };
-  }, [city, units]);
+  }, [city, normalizedUnits]);
 
   return { loading, error, weatherData, forecastData };
 };

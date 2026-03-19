@@ -22,9 +22,10 @@ export const saveLocation = async (location) => {
 export const getLocation = async () => {
   try {
     const location = await AsyncStorage.getItem(STORAGE_KEYS.LAST_LOCATION);
-    return location ? JSON.stringify(location) : null;
+    return location ? JSON.parse(location) : null;
   } catch (error) {
     console.error('Error retrieving location:', error);
+    return null;
   }
 };
 
@@ -42,6 +43,7 @@ export const getPreferences = async () => {
     return prefs ? JSON.parse(prefs) : null;
   } catch (error) {
     console.error('Error retrieving preferences:', error);
+    return null;
   }
 };
 
