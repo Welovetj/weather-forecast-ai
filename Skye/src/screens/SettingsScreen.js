@@ -35,14 +35,6 @@ const SettingsScreen = ({ theme, colors, toggleTheme, unit, setUnit }) => {
         <Text style={styles.sectionDescription}>Calgary, Alberta, Canada</Text>
       </View>
 
-      <View style={styles.sectionCard}>
-        <Text style={styles.sectionTitle}>About PM Accelerator</Text>
-        <Text style={styles.sectionDescription}>
-          PM Accelerator (Product Manager Accelerator) is a career-focused training and mentorship community
-          that helps professionals build product management and related technology skills through practical
-          projects, coaching, and real-world execution.
-        </Text>
-      </View>
     </View>
   );
 };
