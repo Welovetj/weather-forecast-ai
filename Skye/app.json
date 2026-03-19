@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Skye",
+    "slug": "skye-weather-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTabletMode": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs your location to show weather for your area",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs your location to show weather for your area"
+      }
+    },
+    "android": {
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Skye to access your location for weather information."
+        }
+      ]
+    ]
+  }
+}
