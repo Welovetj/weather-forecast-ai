@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SearchBar, UnitToggle } from '../components';
+import { SearchBar, UnitToggle, WeatherSceneEffect } from '../components';
 import { useGeolocation, useWeather } from '../hooks';
 import {
   addFavoriteCity,
@@ -397,7 +397,7 @@ const getTodayFit = (weatherData, unit) => {
   let footwear = 'Comfortable sneakers';
   const extras = [];
   let tone = 'Balanced weather. Keep the outfit sharp but easy.';
-  let emoji = '🧥';
+  let icon = 'shirt-casual';
 
   if (tempC >= 28) {
     top = 'Breathable tee or tank';
@@ -405,51 +405,51 @@ const getTodayFit = (weatherData, unit) => {
     footwear = 'Open sneakers or sandals';
     extras.push('Sunscreen', 'Sunglasses');
     tone = 'Hot and bright. Dress light and stay cool.';
-    emoji = '☀️';
+    icon = 'beach';
   } else if (tempC >= 20) {
     top = 'T-shirt or airy blouse';
     bottom = 'Jeans or chinos';
     footwear = 'Low-profile sneakers';
     tone = 'Comfortable and polished. A light layer is optional.';
-    emoji = '🌤️';
+    icon = 'weather-partly-cloudy';
   } else if (tempC >= 10) {
     top = 'Hoodie or light jacket';
     bottom = 'Long pants';
     footwear = 'Sneakers or light boots';
     tone = 'Cool enough for a layer. Keep a jacket close.';
-    emoji = '🧥';
+    icon = 'weather-cloudy';
   } else if (tempC >= 0) {
     top = 'Warm coat over layers';
     bottom = 'Jeans or thermals';
     footwear = 'Boots with grip';
     extras.push('Scarf');
     tone = 'Cold outside. Layer up before you head out.';
-    emoji = '🧣';
+    icon = 'snowflake';
   } else {
     top = 'Heavy winter coat';
     bottom = 'Thermal base plus warm pants';
     footwear = 'Insulated winter boots';
     extras.push('Gloves', 'Beanie');
     tone = 'Freezing conditions. Full winter kit is the right move.';
-    emoji = '🥶';
+    icon = 'snowflake-alert';
   }
 
   if (description.includes('rain') || description.includes('drizzle')) {
     extras.push('Umbrella', 'Water-resistant shell');
     tone = 'Wet conditions ahead. Keep the fit weatherproof.';
-    emoji = '🌧️';
+    icon = 'weather-rainy';
   }
 
   if (description.includes('snow')) {
     extras.push('Waterproof gloves');
     tone = 'Snow in the air. Prioritize warmth and traction.';
-    emoji = '❄️';
+    icon = 'weather-snowy-heavy';
   }
 
   if (description.includes('thunderstorm')) {
     extras.push('Stay indoors if possible');
     tone = 'Storm risk today. Keep plans flexible and covered.';
-    emoji = '⛈️';
+    icon = 'weather-lightning-rainy';
   }
 
   if (windSpeed > 10) {
@@ -457,7 +457,7 @@ const getTodayFit = (weatherData, unit) => {
   }
 
   return {
-    emoji,
+    icon,
     tone,
     pieces: [
       { key: 'top', label: 'Top', value: top },
@@ -720,6 +720,8 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
         {!loading && !activeError && weatherData ? (
           <>
             <LinearGradient colors={visualPalette.hero} style={styles.heroCard}>
+              <WeatherSceneEffect weatherData={weatherData} style={styles.sceneEffect} />
+              
               <View style={styles.heroTopRow}>
                 <View style={styles.heroTextWrap}>
                   <Text style={styles.heroLocation}>{weatherData?.name}, {weatherData?.sys?.country || '--'}</Text>
@@ -787,8 +789,13 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
 
             {fitGuide ? (
               <View style={[styles.glassCard, { backgroundColor: glassSurface(theme), borderColor: glassBorder(theme) }]}>
-                <Text style={styles.cardEyebrow}>CLOUDORA AI</Text>
-                <Text style={styles.sectionTitle}>{fitGuide.emoji} Today's Fit</Text>
+                <View style={styles.fitHeaderRow}>
+                  <View>
+                    <Text style={styles.cardEyebrow}>CLOUDORA AI</Text>
+                    <Text style={styles.sectionTitle}>Today's Fit</Text>
+                  </View>
+                  <MaterialCommunityIcons name={fitGuide.icon} size={40} color="#E0F2FE" />
+                </View>
                 <Text style={styles.cardSummary}>{fitGuide.tone}</Text>
 
                 <View style={styles.fitGrid}>
@@ -1066,6 +1073,10 @@ const createStyles = (colors, theme) =>
       shadowRadius: 24,
       elevation: 10,
     },
+    sceneEffect: {
+      borderRadius: 28,
+      zIndex: 1,
+    },
     heroTopRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -1212,6 +1223,11 @@ const createStyles = (colors, theme) =>
       borderWidth: 1,
       padding: 18,
       gap: 12,
+    },
+    fitHeaderRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
     },
     cardEyebrow: {
       color: 'rgba(248,250,252,0.72)',

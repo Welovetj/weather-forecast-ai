@@ -6,14 +6,14 @@
 export const getWeatherIcon = (condition) => {
   const conditionLower = condition.toLowerCase();
   
-  if (conditionLower.includes('cloud')) return '☁️';
-  if (conditionLower.includes('rain')) return '🌧️';
-  if (conditionLower.includes('snow')) return '❄️';
-  if (conditionLower.includes('thunder')) return '⛈️';
-  if (conditionLower.includes('clear') || conditionLower.includes('sunny')) return '☀️';
-  if (conditionLower.includes('wind')) return '💨';
+  if (conditionLower.includes('cloud')) return 'weather-cloudy';
+  if (conditionLower.includes('rain')) return 'weather-rainy';
+  if (conditionLower.includes('snow')) return 'weather-snowy-heavy';
+  if (conditionLower.includes('thunder')) return 'weather-lightning-rainy';
+  if (conditionLower.includes('clear') || conditionLower.includes('sunny')) return 'weather-sunny';
+  if (conditionLower.includes('wind')) return 'weather-windy';
   
-  return '🌤️';
+  return 'weather-partly-cloudy';
 };
 
 export const getWeatherColor = (condition) => {

@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { UnitToggle } from '../components';
 
 const THEME_OPTIONS = [
-  { mode: 'light', label: '☀️ Light' },
-  { mode: 'dark',  label: '🌙 Dark'  },
-  { mode: 'auto',  label: '🌓 Auto'  },
+  { mode: 'light', label: 'Light', icon: 'weather-sunny' },
+  { mode: 'dark',  label: 'Dark', icon: 'moon-waning-crescent' },
+  { mode: 'auto',  label: 'Auto', icon: 'weather-night-partly-cloudy' },
 ];
 
 const SettingsScreen = ({ theme, colors, themeMode, setThemeMode, unit, setUnit }) => {
@@ -19,7 +20,7 @@ const SettingsScreen = ({ theme, colors, themeMode, setThemeMode, unit, setUnit 
         <Text style={styles.sectionTitle}>Appearance</Text>
         <Text style={styles.sectionDescription}>Choose your preferred theme.</Text>
         <View style={styles.themeRow}>
-          {THEME_OPTIONS.map(({ mode, label }) => (
+          {THEME_OPTIONS.map(({ mode, label, icon }) => (
             <Pressable
               key={mode}
               onPress={() => setThemeMode(mode)}
@@ -27,6 +28,12 @@ const SettingsScreen = ({ theme, colors, themeMode, setThemeMode, unit, setUnit 
               accessibilityRole="button"
               accessibilityLabel={`Set ${mode} theme`}
             >
+              <MaterialCommunityIcons
+                name={icon}
+                size={18}
+                color={themeMode === mode ? '#FFFFFF' : colors?.accent || '#0EA5E9'}
+                style={styles.themeIcon}
+              />
               <Text style={[styles.themeOptionText, themeMode === mode && styles.themeOptionTextActive]}>
                 {label}
               </Text>
@@ -105,6 +112,12 @@ const createStyles = (colors, theme) =>
       borderWidth: 1,
       borderColor: theme === 'dark' ? 'rgba(255,255,255,0.18)' : 'rgba(17,24,39,0.15)',
       alignItems: 'center',
+      gap: 6,
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+    themeIcon: {
+      marginRight: 4,
     },
     themeOptionActive: {
       backgroundColor: colors.accent,

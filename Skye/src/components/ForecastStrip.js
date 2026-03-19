@@ -1,25 +1,26 @@
 import React, { useMemo } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const getWeatherEmoji = (forecastItem) => {
+const getWeatherIcon = (forecastItem) => {
   const weatherId = forecastItem?.weather?.[0]?.id;
   const main = forecastItem?.weather?.[0]?.main?.toLowerCase();
 
   if (typeof weatherId === 'number') {
-    if (weatherId >= 200 && weatherId < 300) return '⛈️';
-    if (weatherId >= 300 && weatherId < 600) return '🌧️';
-    if (weatherId >= 600 && weatherId < 700) return '❄️';
-    if (weatherId >= 700 && weatherId < 800) return '🌫️';
-    if (weatherId === 800) return '☀️';
-    if (weatherId > 800 && weatherId <= 804) return '☁️';
+    if (weatherId >= 200 && weatherId < 300) return 'weather-lightning-rainy';
+    if (weatherId >= 300 && weatherId < 600) return 'weather-pouring';
+    if (weatherId >= 600 && weatherId < 700) return 'weather-snowy-heavy';
+    if (weatherId >= 700 && weatherId < 800) return 'weather-fog';
+    if (weatherId === 800) return 'weather-sunny';
+    if (weatherId > 800 && weatherId <= 804) return 'weather-partly-cloudy';
   }
 
-  if (main?.includes('clear')) return '☀️';
-  if (main?.includes('cloud')) return '☁️';
-  if (main?.includes('rain')) return '🌧️';
-  if (main?.includes('snow')) return '❄️';
-  if (main?.includes('thunder')) return '⛈️';
-  return '🌤️';
+  if (main?.includes('clear')) return 'weather-sunny';
+  if (main?.includes('cloud')) return 'weather-cloudy';
+  if (main?.includes('rain')) return 'weather-rainy';
+  if (main?.includes('snow')) return 'weather-snowy';
+  if (main?.includes('thunder')) return 'weather-lightning';
+  return 'weather-partly-cloudy';
 };
 
 const getDayKey = (item) => {
@@ -98,9 +99,10 @@ const ForecastStrip = ({ forecastData, theme, colors }) => {
       .map((day) => ({
         dayKey: day.dayKey,
         dayName: day.dayName,
-        icon: getWeatherEmoji(day.representative),
+        icon: getWeatherIcon(day.representative),
         high: Math.round(day.high),
         low: Math.round(day.low),
+        representative: day.representative,
       }));
   }, [forecastData]);
 
@@ -119,7 +121,7 @@ const ForecastStrip = ({ forecastData, theme, colors }) => {
         renderItem={({ item }) => (
           <View style={styles.card}>
             <Text style={styles.dayText}>{item.dayName}</Text>
-            <Text style={styles.emoji}>{item.icon}</Text>
+            <MaterialCommunityIcons name={item.icon} size={32} color={colors?.accent || '#0EA5E9'} style={styles.icon} />
             <Text style={styles.tempText}>{item.high}° / {item.low}°</Text>
           </View>
         )}
@@ -157,8 +159,7 @@ const createStyles = (colors, theme) =>
       fontSize: 14,
       fontWeight: '700',
     },
-    emoji: {
-      fontSize: 30,
+    icon: {
       marginTop: 8,
       marginBottom: 8,
     },

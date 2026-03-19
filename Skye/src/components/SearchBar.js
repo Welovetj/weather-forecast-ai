@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const SearchBar = ({ onSearch, onLocate, placeholder = 'Search city', theme = 'light', colors }) => {
   const [city, setCity] = useState('');
@@ -30,7 +31,7 @@ const SearchBar = ({ onSearch, onLocate, placeholder = 'Search city', theme = 'l
         accessibilityRole="button"
         accessibilityLabel="Use current location"
       >
-        <Text style={styles.icon}>📍</Text>
+        <MaterialCommunityIcons name="map-marker" size={20} color="#0EA5E9" />
       </Pressable>
 
       <TextInput
@@ -75,9 +76,6 @@ const createStyles = (theme, colors) =>
       justifyContent: 'center',
       backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.09)' : '#F3F4F6',
       marginRight: 8,
-    },
-    icon: {
-      fontSize: 16,
     },
     input: {
       flex: 1,
