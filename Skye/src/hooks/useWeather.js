@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { OPENWEATHER_API_KEY } from '@env';
 import {
+  WEATHER_API_KEY,
   WEATHER_API_URL,
   FORECAST_API_URL,
+  WEATHER_PROXY_URL,
   API_TIMEOUT,
 } from '../constants/api';
 
@@ -33,11 +34,13 @@ const useWeather = (city, units = 'metric') => {
         return;
       }
 
-      if (!OPENWEATHER_API_KEY || OPENWEATHER_API_KEY === 'YOUR_API_KEY_HERE') {
+      const shouldUseProxy = Boolean(WEATHER_PROXY_URL);
+
+      if (!shouldUseProxy && (!WEATHER_API_KEY || WEATHER_API_KEY === 'YOUR_API_KEY_HERE')) {
         if (isMounted) {
           setWeatherData(null);
           setForecastData(null);
-          setError('OpenWeather API key is missing. Set OPENWEATHER_API_KEY in .env.');
+          setError('OpenWeather API key is missing. Set EXPO_PUBLIC_OPENWEATHER_API_KEY in .env or configure EXPO_PUBLIC_WEATHER_PROXY_URL.');
           setLoading(false);
         }
         return;
@@ -51,17 +54,23 @@ const useWeather = (city, units = 'metric') => {
 
         const params = {
           q: city.trim(),
-          appid: OPENWEATHER_API_KEY,
           units: normalizedUnits,
         };
 
+        if (!shouldUseProxy) {
+          params.appid = WEATHER_API_KEY;
+        }
+
+        const weatherEndpoint = shouldUseProxy ? `${WEATHER_PROXY_URL}/weather` : WEATHER_API_URL;
+        const forecastEndpoint = shouldUseProxy ? `${WEATHER_PROXY_URL}/forecast` : FORECAST_API_URL;
+
         const [weatherResponse, forecastResponse] = await Promise.all([
-          axios.get(WEATHER_API_URL, {
+          axios.get(weatherEndpoint, {
             params,
             timeout: API_TIMEOUT,
             signal: controller.signal,
           }),
-          axios.get(FORECAST_API_URL, {
+          axios.get(forecastEndpoint, {
             params,
             timeout: API_TIMEOUT,
             signal: controller.signal,

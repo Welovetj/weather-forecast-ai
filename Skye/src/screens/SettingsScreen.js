@@ -12,7 +12,12 @@ const SettingsScreen = ({ theme, colors, toggleTheme, unit, setUnit }) => {
       <View style={styles.sectionCard}>
         <Text style={styles.sectionTitle}>Appearance</Text>
         <Text style={styles.sectionDescription}>Choose your preferred app theme.</Text>
-        <Pressable onPress={toggleTheme} style={styles.themeButton}>
+        <Pressable
+          onPress={toggleTheme}
+          style={styles.themeButton}
+          accessibilityRole="button"
+          accessibilityLabel="Toggle app theme"
+        >
           <Text style={styles.themeButtonText}>Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode</Text>
         </Pressable>
       </View>
@@ -20,7 +25,23 @@ const SettingsScreen = ({ theme, colors, toggleTheme, unit, setUnit }) => {
       <View style={styles.sectionCard}>
         <Text style={styles.sectionTitle}>Temperature Unit</Text>
         <Text style={styles.sectionDescription}>Select Celsius or Fahrenheit for weather values.</Text>
-        <UnitToggle unit={unit} onToggle={setUnit} />
+        <UnitToggle unit={unit} onToggle={setUnit} theme={theme} colors={colors} />
+      </View>
+
+      <View style={styles.sectionCard}>
+        <Text style={styles.sectionTitle}>Candidate Profile</Text>
+        <Text style={styles.sectionDescription}>EFEMINI TEJIRI</Text>
+        <Text style={styles.sectionDescription}>Student, Mount Royal University</Text>
+        <Text style={styles.sectionDescription}>Calgary, Alberta, Canada</Text>
+      </View>
+
+      <View style={styles.sectionCard}>
+        <Text style={styles.sectionTitle}>About PM Accelerator</Text>
+        <Text style={styles.sectionDescription}>
+          PM Accelerator (Product Manager Accelerator) is a career-focused training and mentorship community
+          that helps professionals build product management and related technology skills through practical
+          projects, coaching, and real-world execution.
+        </Text>
       </View>
     </View>
   );

@@ -27,6 +27,7 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
     cityName,
     loading: locationLoading,
     error: locationError,
+    refreshLocation,
   } = useGeolocation();
 
   const {
@@ -52,10 +53,13 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
     setCityQuery(searchedCity);
   };
 
-  const handleLocate = () => {
+  const handleLocate = async () => {
     setHasManualSelection(false);
 
-    if (cityName) {
+    const nextCity = await refreshLocation();
+    if (nextCity) {
+      setCityQuery(nextCity);
+    } else if (cityName) {
       setCityQuery(cityName);
     }
   };
@@ -64,15 +68,26 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <View style={styles.headerRow}>
         <Text style={styles.headerTitle}>Skye</Text>
-        <Pressable onPress={() => navigation?.navigate('Settings')} style={styles.themeButton}>
+        <Pressable
+          onPress={() => navigation?.navigate('Settings')}
+          style={styles.themeButton}
+          accessibilityRole="button"
+          accessibilityLabel="Open settings"
+        >
           <Text style={styles.themeButtonText}>⚙️</Text>
         </Pressable>
       </View>
 
-      <SearchBar onSearch={handleSearch} onLocate={handleLocate} placeholder="Search by city" />
+      <SearchBar
+        onSearch={handleSearch}
+        onLocate={handleLocate}
+        placeholder="Search by city"
+        theme={theme}
+        colors={colors}
+      />
 
       <View style={styles.controlsRow}>
-        <UnitToggle unit={unit} onToggle={setUnit} />
+        <UnitToggle unit={unit} onToggle={setUnit} theme={theme} colors={colors} />
       </View>
 
       {loading ? (
@@ -96,7 +111,7 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
       {!loading && !activeError && weatherData ? (
         <>
           <WeatherCard weatherData={weatherData} />
-          <ForecastStrip forecastData={forecastData} />
+          <ForecastStrip forecastData={forecastData} theme={theme} colors={colors} />
         </>
       ) : null}
     </ScrollView>

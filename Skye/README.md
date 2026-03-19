@@ -1,138 +1,146 @@
-# Skye - Weather Forecast App
+# Skye Weather App (Expo React Native)
 
-A React Native weather app built with Expo that provides real-time weather forecasts using geolocation services.
+## Candidate Details
+- Name: EFEMINI TEJIRI
+- Institution: Mount Royal University
+- Location: Calgary, Alberta, Canada
 
-## Features
+## Assessment Completed
+- Completed: Tech Assessment #1 (Frontend Engineer)
+- Not completed in this repository: Tech Assessment #2 (Backend CRUD/API/Export)
 
-- Real-time weather updates
-- Geolocation support (GPS)
-- Local preference storage
-- API integration with weather service
+## Project Summary
+Skye is a weather app that allows users to:
+- Search weather by city name
+- Fetch weather based on current GPS location
+- View current weather details
+- View a 5-day forecast in a horizontal strip
+- Switch temperature unit (C/F)
+- Toggle dark/light mode
 
-## Dependencies
+## PM Accelerator Description
+PM Accelerator (Product Manager Accelerator) is a career-focused training and mentorship community that helps professionals build product management and related technology skills through practical projects, coaching, and real-world execution.
 
-### Core Framework
-- **expo** (v50.0.0) - Expo framework for React Native development
-- **react** (18.2.0) - React library
-- **react-native** (0.73.6) - React Native framework
+## Tech Stack
+- Expo + React Native
+- React Navigation (Native Stack)
+- Axios
+- Expo Location
+- AsyncStorage
 
-### Weather & Location
-- **axios** (v1.6.0) - HTTP client for API calls
-- **expo-location** (v16.5.0) - Access device location services
+## Frontend Requirement Mapping (Tech Assessment #1)
 
-### Storage
-- **@react-native-async-storage/async-storage** (v1.21.0) - Persistent local storage for preferences
+### Core Requirements
+- Let users enter a location and get current weather: Implemented through city search input on Home screen.
+- Show weather clearly with useful details: Implemented with current weather card (city, country, temperature, feels-like, description, humidity, wind, visibility).
+- Let users see weather from current location: Implemented via geolocation hook and location trigger button.
+- Use icons/images for weather info: Implemented with weather emoji icons in forecast strip and weather visuals in UI.
 
-### Navigation
-- **@react-navigation/native** (v6.1.0) - Navigation library
-- **@react-navigation/bottom-tabs** (v6.5.0) - Bottom tab navigation
-- **react-native-screens** (v3.26.0) - Native screen components
-- **react-native-safe-area-context** (v4.7.0) - Safe area handling
+### Stand-Out Requirements
+- 5-day forecast (section 1.1): Implemented via ForecastStrip component grouped by day.
+- Error handling (section 1.2): Implemented with styled city-not-found and API-failure messages.
 
-### UI/Status
-- **expo-status-bar** (v1.11.1) - Status bar management
+### Responsive Design Techniques Used
+- Flexible layouts using flexbox and percentage-free adaptive spacing.
+- Root ScrollView for content adaptability on small screens.
+- Horizontal FlatList for forecast cards to avoid vertical overflow.
+- Theme-aware visual tokens for contrast/readability in dark and light mode.
 
-## Installation
+### APIs Managed
+- OpenWeatherMap Current Weather API
+- OpenWeatherMap 5-Day Forecast API
+- Optional geolocation via expo-location
 
-1. **Prerequisites**: Ensure you have Node.js and npm installed
-   ```bash
-   node --version
-   npm --version
-   ```
+## Screens and UX
 
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+### Home Screen
+- SearchBar for city lookup
+- Location button for current-position lookup
+- UnitToggle (C/F)
+- WeatherCard for current weather details
+- ForecastStrip for 5-day forecast
+- Settings gear button
 
-3. **Start the development server**:
-   ```bash
-   npm start
-   ```
+### Settings Screen
+- Theme toggle (dark/light)
+- Temperature unit toggle (C/F)
+- Candidate profile section
+- PM Accelerator informational section
 
-## Running the App
+## Environment Setup
+Create a `.env` file in project root:
 
-### Expo CLI (Recommended)
+```env
+EXPO_PUBLIC_OPENWEATHER_API_KEY=YOUR_OPENWEATHER_API_KEY_HERE
+EXPO_PUBLIC_WEATHER_PROXY_URL=
+```
+
+Notes:
+- `EXPO_PUBLIC_OPENWEATHER_API_KEY` is used for direct OpenWeather calls.
+- `EXPO_PUBLIC_WEATHER_PROXY_URL` is optional. If set, app routes calls through backend proxy endpoints (`/weather`, `/forecast`).
+
+## Installation and Run
 ```bash
+npm install
 npm start
 ```
 
-Then choose:
-- Press `i` to open in iOS Simulator
-- Press `a` to open in Android Emulator
-- Press `w` to open in web browser
-- Scan QR code with Expo Go app on your phone
+Run options:
+- Press `a` for Android emulator
+- Press `i` for iOS simulator
+- Press `w` for web
+- Or scan QR with Expo Go
 
-### Android
-```bash
-npm run android
-```
-
-### iOS
-```bash
-npm run ios
-```
-
-### Web
-```bash
-npm run web
-```
-
-## Project Structure
-
-```
+## Repository Structure
+```text
 Skye/
-├── App.js              # Main app component
-├── app.json            # Expo configuration
-├── package.json        # Dependencies and scripts
-├── .gitignore          # Git ignore rules
-└── README.md           # This file
+  App.js
+  app.json
+  package.json
+  .env.example
+  src/
+    components/
+    hooks/
+    screens/
+    constants/
+    services/
+    utils/
 ```
 
-## Configuration
+## What Is Included for Evaluators
+- Live API data (no static weather stubs)
+- Error handling for invalid cities and request failures
+- In-app candidate details and PM Accelerator description
+- Package/dependency manifest via `package.json` and lockfile
 
-The `app.json` file contains:
-- App metadata and permissions
-- iOS and Android specific settings
-- Location permission requests
-- Expo plugin configurations
+## Demo Video
+- Add your demo URL before submission:
+  - DEMO_URL_HERE
 
-## Permissions
+## Submission Checklist (Copy Into Google Form)
 
-### Android
-- `ACCESS_FINE_LOCATION` - Precise device location
-- `ACCESS_COARSE_LOCATION` - Approximate location
+Use this block as your quick submission answer:
 
-### iOS
-- Location usage descriptions for privacy
+```text
+Candidate Name: EFEMINI TEJIRI
+Assessment Completed: Tech Assessment #1 (Frontend)
+GitHub Repository URL: REPO_URL_HERE
+Repository Visibility: Public OR Private with collaborators added (community@pmaccelerator.io, hr@pmaccelerator.io)
+Clone/Download Access: Enabled
+Demo Video URL (1-2 min): DEMO_URL_HERE
 
-## API Integration
+What was built:
+- React Native Expo weather app
+- City search + current location weather
+- Current weather details and 5-day forecast
+- Error handling (city not found / API failure)
+- Theme toggle + temperature unit toggle
 
-Update the app to integrate with a weather API (e.g., OpenWeatherMap, WeatherAPI):
+How to run:
+1) npm install
+2) Add .env with EXPO_PUBLIC_OPENWEATHER_API_KEY
+3) npm start
 
-1. Install axios (already included)
-2. Create an API service module
-3. Use `expo-location` to get user coordinates
-4. Fetch weather data based on location
-5. Store preferences using AsyncStorage
-
-## Building for Production
-
-```bash
-npm run eject
+Notes:
+- Tech Assessment #2 (backend CRUD/export) is not included in this repository.
 ```
-
-(Note: Ejecting gives you full control but you lose some Expo benefits)
-
-## Troubleshooting
-
-- **App won't start**: Clear cache with `expo start -c`
-- **Location permission denied**: Check app.json permissions
-- **Blank screen**: Ensure App.js is properly configured
-
-## Learn More
-
-- [Expo Documentation](https://docs.expo.dev)
-- [React Native Docs](https://reactnative.dev)
-- [AsyncStorage Guide](https://react-native-async-storage.github.io/async-storage)
-- [Axios Documentation](https://axios-http.com)

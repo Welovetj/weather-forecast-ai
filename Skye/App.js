@@ -35,7 +35,6 @@ export default function App() {
                 {...props}
                 theme={theme}
                 colors={colors}
-                toggleTheme={toggleTheme}
                 unit={unit}
                 setUnit={setUnit}
               />

@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { useTheme } from '../hooks';
 
 const getWeatherEmoji = (forecastItem) => {
   const weatherId = forecastItem?.weather?.[0]?.id;
@@ -51,8 +50,7 @@ const getHourDistanceToNoon = (item) => {
   return Number.MAX_SAFE_INTEGER;
 };
 
-const ForecastStrip = ({ forecastData }) => {
-  const { theme, colors } = useTheme();
+const ForecastStrip = ({ forecastData, theme, colors }) => {
   const styles = useMemo(() => createStyles(colors, theme), [colors, theme]);
 
   const dailyForecast = useMemo(() => {
