@@ -2,7 +2,13 @@ import React, { useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { UnitToggle } from '../components';
 
-const SettingsScreen = ({ theme, colors, toggleTheme, unit, setUnit }) => {
+const THEME_OPTIONS = [
+  { mode: 'light', label: '☀️ Light' },
+  { mode: 'dark',  label: '🌙 Dark'  },
+  { mode: 'auto',  label: '🌓 Auto'  },
+];
+
+const SettingsScreen = ({ theme, colors, themeMode, setThemeMode, unit, setUnit }) => {
   const styles = useMemo(() => createStyles(colors, theme), [colors, theme]);
 
   return (
@@ -11,15 +17,25 @@ const SettingsScreen = ({ theme, colors, toggleTheme, unit, setUnit }) => {
 
       <View style={styles.sectionCard}>
         <Text style={styles.sectionTitle}>Appearance</Text>
-        <Text style={styles.sectionDescription}>Choose your preferred app theme.</Text>
-        <Pressable
-          onPress={toggleTheme}
-          style={styles.themeButton}
-          accessibilityRole="button"
-          accessibilityLabel="Toggle app theme"
-        >
-          <Text style={styles.themeButtonText}>Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode</Text>
-        </Pressable>
+        <Text style={styles.sectionDescription}>Choose your preferred theme.</Text>
+        <View style={styles.themeRow}>
+          {THEME_OPTIONS.map(({ mode, label }) => (
+            <Pressable
+              key={mode}
+              onPress={() => setThemeMode(mode)}
+              style={[styles.themeOption, themeMode === mode && styles.themeOptionActive]}
+              accessibilityRole="button"
+              accessibilityLabel={`Set ${mode} theme`}
+            >
+              <Text style={[styles.themeOptionText, themeMode === mode && styles.themeOptionTextActive]}>
+                {label}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+        {themeMode === 'auto' && (
+          <Text style={styles.autoNote}>Switches to dark after 8 PM, light at 6 AM.</Text>
+        )}
       </View>
 
       <View style={styles.sectionCard}>
@@ -29,7 +45,7 @@ const SettingsScreen = ({ theme, colors, toggleTheme, unit, setUnit }) => {
       </View>
 
       <View style={styles.sectionCard}>
-        <Text style={styles.sectionTitle}>Candidate Profile</Text>
+        <Text style={styles.sectionTitle}>About Author</Text>
         <Text style={styles.sectionDescription}>EFEMINI TEJIRI</Text>
         <Text style={styles.sectionDescription}>Student, Mount Royal University</Text>
         <Text style={styles.sectionDescription}>Calgary, Alberta, Canada</Text>
@@ -77,6 +93,36 @@ const createStyles = (colors, theme) =>
       opacity: 0.75,
       fontSize: 14,
       lineHeight: 20,
+    },
+    themeRow: {
+      flexDirection: 'row',
+      gap: 8,
+    },
+    themeOption: {
+      flex: 1,
+      paddingVertical: 10,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: theme === 'dark' ? 'rgba(255,255,255,0.18)' : 'rgba(17,24,39,0.15)',
+      alignItems: 'center',
+    },
+    themeOptionActive: {
+      backgroundColor: colors.accent,
+      borderColor: colors.accent,
+    },
+    themeOptionText: {
+      color: colors.text,
+      fontWeight: '600',
+      fontSize: 13,
+    },
+    themeOptionTextActive: {
+      color: '#FFFFFF',
+    },
+    autoNote: {
+      color: colors.text,
+      opacity: 0.6,
+      fontSize: 12,
+      fontStyle: 'italic',
     },
     themeButton: {
       alignSelf: 'flex-start',

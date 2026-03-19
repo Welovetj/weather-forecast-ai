@@ -36,6 +36,24 @@ export const getWeather = async (latitude, longitude, units = 'metric') => {
   }
 };
 
+export const getCurrentWeatherByCity = async (city, units = 'metric') => {
+  try {
+    const normalizedUnits = units === 'imperial' ? 'imperial' : 'metric';
+    const response = await axios.get(WEATHER_API_URL, {
+      params: {
+        q: city,
+        appid: WEATHER_API_KEY,
+        units: normalizedUnits,
+      },
+      timeout: API_TIMEOUT,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to fetch city weather');
+  }
+};
+
 export const getForecast = async (latitude, longitude) => {
   try {
     const response = await axios.get(FORECAST_API_URL, {

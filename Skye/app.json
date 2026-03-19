@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Skye",
-    "slug": "skye-weather-app",
+    "name": "Cloudora",
+    "slug": "cloudora-weather-app",
     "version": "1.0.0",
     "sdkVersion": "54.0.0",
     "assetBundlePatterns": [
@@ -27,7 +27,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow Skye to access your location for weather information."
+          "locationAlwaysAndWhenInUsePermission": "Allow Cloudora to access your location for weather information."
         }
       ]
     ]

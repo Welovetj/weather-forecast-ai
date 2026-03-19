@@ -9,7 +9,7 @@ import { useTemperatureUnit, useTheme } from './src/hooks';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const { theme, colors, toggleTheme } = useTheme();
+  const { theme, colors, toggleTheme, themeMode, setThemeMode } = useTheme();
   const { unit, setUnit } = useTemperatureUnit();
 
   return (
@@ -29,7 +29,7 @@ export default function App() {
             },
           }}
         >
-          <Stack.Screen name="Home" options={{ title: 'Skye' }}>
+          <Stack.Screen name="Home" options={{ title: 'Cloudora' }}>
             {(props) => (
               <HomeScreen
                 {...props}
@@ -47,7 +47,8 @@ export default function App() {
                 {...props}
                 theme={theme}
                 colors={colors}
-                toggleTheme={toggleTheme}
+                themeMode={themeMode}
+                setThemeMode={setThemeMode}
                 unit={unit}
                 setUnit={setUnit}
               />
