@@ -115,7 +115,7 @@ Skye/
 
 ## Demo Video
 - Add your demo URL before submission:
-  - DEMO_URL_HERE
+  - TO_BE_ADDED_AFTER_RECORDING
 
 ## Submission Checklist (Copy Into Google Form)
 
@@ -124,10 +124,10 @@ Use this block as your quick submission answer:
 ```text
 Candidate Name: EFEMINI TEJIRI
 Assessment Completed: Tech Assessment #1 (Frontend)
-GitHub Repository URL: REPO_URL_HERE
+GitHub Repository URL: https://github.com/Welovetj/weather-forecast-ai
 Repository Visibility: Public OR Private with collaborators added (community@pmaccelerator.io, hr@pmaccelerator.io)
 Clone/Download Access: Enabled
-Demo Video URL (1-2 min): DEMO_URL_HERE
+Demo Video URL (1-2 min): TO_BE_ADDED_AFTER_RECORDING
 
 What was built:
 - React Native Expo weather app
