@@ -9,6 +9,7 @@ const STORAGE_KEYS = {
   LAST_LOCATION: '@skye_last_location',
   USER_PREFERENCES: '@skye_preferences',
   FAVORITE_CITIES: '@skye_favorite_cities',
+  STYLIST_MODE: '@skye_stylist_mode',
 };
 
 const normalizeCities = (cities) => {
@@ -130,11 +131,30 @@ export const moveFavoriteCity = async (cityToMove, direction) => {
   return nextCities;
 };
 
+export const saveStylistMode = async (mode) => {
+  try {
+    await AsyncStorage.setItem(STORAGE_KEYS.STYLIST_MODE, mode);
+  } catch (error) {
+    console.error('Error saving stylist mode:', error);
+  }
+};
+
+export const getStylistMode = async () => {
+  try {
+    const mode = await AsyncStorage.getItem(STORAGE_KEYS.STYLIST_MODE);
+    return ['casual', 'campus', 'commute', 'evening'].includes(mode) ? mode : 'casual';
+  } catch (error) {
+    console.error('Error retrieving stylist mode:', error);
+    return 'casual';
+  }
+};
+
 export const clearAllData = async () => {
   try {
     await AsyncStorage.removeItem(STORAGE_KEYS.LAST_LOCATION);
     await AsyncStorage.removeItem(STORAGE_KEYS.USER_PREFERENCES);
     await AsyncStorage.removeItem(STORAGE_KEYS.FAVORITE_CITIES);
+    await AsyncStorage.removeItem(STORAGE_KEYS.STYLIST_MODE);
   } catch (error) {
     console.error('Error clearing storage:', error);
   }

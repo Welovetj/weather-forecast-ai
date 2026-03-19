@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { HomeScreen, SettingsScreen } from './src/screens';
 import { useTemperatureUnit, useTheme } from './src/hooks';
 
@@ -13,7 +14,7 @@ export default function App() {
   const { unit, setUnit } = useTemperatureUnit();
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -57,7 +58,7 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
