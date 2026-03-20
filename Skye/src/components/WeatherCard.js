@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, Linking } from 'react-native';
+import { GOOGLE_MAPS_KEY } from '../constants/api';
 
 /**
  * WeatherCard Component
@@ -16,6 +17,27 @@ const WeatherCard = ({ weatherData }) => {
   const visibilityKm = typeof weatherData?.visibility === 'number'
     ? (weatherData.visibility / 1000).toFixed(1)
     : null;
+  const latitude = weatherData?.coord?.lat;
+  const longitude = weatherData?.coord?.lon;
+  const canRenderMap =
+    typeof latitude === 'number' &&
+    typeof longitude === 'number' &&
+    Boolean(GOOGLE_MAPS_KEY);
+
+  const mapUrl = canRenderMap
+    ? `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=11&size=600x200&maptype=roadmap&key=${GOOGLE_MAPS_KEY}`
+    : null;
+
+  const handleOpenYouTube = async () => {
+    const query = encodeURIComponent(`${cityName} weather`);
+    const youtubeUrl = `https://www.youtube.com/results?search_query=${query}`;
+
+    try {
+      await Linking.openURL(youtubeUrl);
+    } catch (error) {
+      console.error('Failed to open YouTube URL:', error);
+    }
+  };
 
   return (
     <View style={styles.card}>
@@ -27,12 +49,30 @@ const WeatherCard = ({ weatherData }) => {
 
       <Text style={styles.condition}>{conditionDescription}</Text>
 
+      {mapUrl ? (
+        <Image
+          source={{ uri: mapUrl }}
+          style={styles.mapImage}
+          resizeMode="cover"
+          accessibilityLabel="Location static map"
+        />
+      ) : null}
+
       <View style={styles.metricsContainer}>
         <Text style={styles.metric}>Feels like: {typeof feelsLike === 'number' ? `${Math.round(feelsLike)}°` : '--'}</Text>
         <Text style={styles.metric}>Humidity: {typeof humidity === 'number' ? `${humidity}%` : '--'}</Text>
         <Text style={styles.metric}>Wind: {typeof windSpeed === 'number' ? `${windSpeed} m/s` : '--'}</Text>
         <Text style={styles.metric}>Visibility: {visibilityKm ? `${visibilityKm} km` : '--'}</Text>
       </View>
+
+      <Pressable
+        onPress={handleOpenYouTube}
+        style={styles.youtubeButton}
+        accessibilityRole="button"
+        accessibilityLabel={`Watch ${cityName} weather on YouTube`}
+      >
+        <Text style={styles.youtubeButtonText}>{`▶ Watch ${cityName} on YouTube`}</Text>
+      </Pressable>
     </View>
   );
 };
@@ -66,6 +106,13 @@ const styles = StyleSheet.create({
     marginTop: 6,
     textTransform: 'capitalize',
   },
+  mapImage: {
+    width: '100%',
+    height: 160,
+    borderRadius: 14,
+    marginTop: 14,
+    backgroundColor: '#1F2937',
+  },
   metricsContainer: {
     marginTop: 16,
     gap: 8,
@@ -73,6 +120,22 @@ const styles = StyleSheet.create({
   metric: {
     color: '#E5E7EB',
     fontSize: 15,
+  },
+  youtubeButton: {
+    marginTop: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.24)',
+    backgroundColor: 'rgba(239,68,68,0.16)',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  youtubeButtonText: {
+    color: '#FEE2E2',
+    fontSize: 14,
+    fontWeight: '800',
   },
 });
 

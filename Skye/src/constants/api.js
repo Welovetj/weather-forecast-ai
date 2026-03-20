@@ -6,6 +6,9 @@
 // Weather API - OpenWeatherMap (example)
 // Get your free API key from https://openweathermap.org/api
 export const WEATHER_API_KEY = process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY || 'YOUR_API_KEY_HERE';
+export const GOOGLE_MAPS_KEY = process.env.EXPO_PUBLIC_GOOGLE_MAPS_KEY || '';
+export const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+export const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
 export const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5/weather';
 export const FORECAST_API_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 export const WEATHER_PROXY_URL = process.env.EXPO_PUBLIC_WEATHER_PROXY_URL || '';

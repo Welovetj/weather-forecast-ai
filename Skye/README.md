@@ -1,146 +1,85 @@
-# Skye Weather App (Expo React Native)
+# Skye (Expo React Native Weather App)
 
-## Candidate Details
-- Name: EFEMINI TEJIRI
-- Institution: Mount Royal University
-- Location: Calgary, Alberta, Canada
+Skye is a React Native Expo weather app that helps users search live weather, view location-aware forecasts, manage historical search records, and use practical extras like export tools, maps, and media links. It is designed as a polished mobile weather experience with local database support, theme controls, and cloud-ready integrations.
 
-## Assessment Completed
-- Completed: Tech Assessment #1 (Frontend Engineer)
-- Not completed in this repository: Tech Assessment #2 (Backend CRUD/API/Export)
+## Features
 
-## Project Summary
-Skye is a weather app that allows users to:
-- Search weather by city name
-- Fetch weather based on current GPS location
-- View current weather details
-- View a 5-day forecast in a horizontal strip
-- Switch temperature unit (C/F)
-- Toggle dark/light mode
+- Current weather search by city
+- Date range history support
+- Local SQLite CRUD database for saved searches
+- CSV export for saved records
+- JSON export for saved records
+- Optional Supabase cloud sync for saved search records
+- Dark/light theme mode
+- Temperature unit toggle (°C/°F)
+- Geolocation-based city/weather lookup
+- Google Maps static preview in weather card
+- YouTube integration for city weather search
 
-## PM Accelerator Description
-PM Accelerator (Product Manager Accelerator) is a career-focused training and mentorship community that helps professionals build product management and related technology skills through practical projects, coaching, and real-world execution.
+## Setup
 
-## Tech Stack
-- Expo + React Native
-- React Navigation (Native Stack)
-- Axios
-- Expo Location
-- AsyncStorage
+1. Install dependencies:
 
-## Frontend Requirement Mapping (Tech Assessment #1)
+```bash
+npm install
+```
 
-### Core Requirements
-- Let users enter a location and get current weather: Implemented through city search input on Home screen.
-- Show weather clearly with useful details: Implemented with current weather card (city, country, temperature, feels-like, description, humidity, wind, visibility).
-- Let users see weather from current location: Implemented via geolocation hook and location trigger button.
-- Use icons/images for weather info: Implemented with weather emoji icons in forecast strip and weather visuals in UI.
+2. Use `.env.example` as your setup template and copy it to `.env`:
 
-### Stand-Out Requirements
-- 5-day forecast (section 1.1): Implemented via ForecastStrip component grouped by day.
-- Error handling (section 1.2): Implemented with styled city-not-found and API-failure messages.
+```bash
+cp .env.example .env
+```
 
-### Responsive Design Techniques Used
-- Flexible layouts using flexbox and percentage-free adaptive spacing.
-- Root ScrollView for content adaptability on small screens.
-- Horizontal FlatList for forecast cards to avoid vertical overflow.
-- Theme-aware visual tokens for contrast/readability in dark and light mode.
-
-### APIs Managed
-- OpenWeatherMap Current Weather API
-- OpenWeatherMap 5-Day Forecast API
-- Optional geolocation via expo-location
-
-## Screens and UX
-
-### Home Screen
-- SearchBar for city lookup
-- Location button for current-position lookup
-- UnitToggle (C/F)
-- WeatherCard for current weather details
-- ForecastStrip for 5-day forecast
-- Settings gear button
-
-### Settings Screen
-- Theme toggle (dark/light)
-- Temperature unit toggle (C/F)
-- Candidate profile section
-- PM Accelerator informational section
-
-## Environment Setup
-Create a `.env` file in project root:
+3. In `.env`, set your values:
 
 ```env
 EXPO_PUBLIC_OPENWEATHER_API_KEY=YOUR_OPENWEATHER_API_KEY_HERE
+EXPO_PUBLIC_GOOGLE_MAPS_KEY=YOUR_GOOGLE_STATIC_MAPS_KEY_HERE
+EXPO_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_PROJECT_URL
+EXPO_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
 EXPO_PUBLIC_WEATHER_PROXY_URL=
 ```
 
 Notes:
-- `EXPO_PUBLIC_OPENWEATHER_API_KEY` is used for direct OpenWeather calls.
-- `EXPO_PUBLIC_WEATHER_PROXY_URL` is optional. If set, app routes calls through backend proxy endpoints (`/weather`, `/forecast`).
 
-## Installation and Run
+- `EXPO_PUBLIC_OPENWEATHER_API_KEY` is required for OpenWeather current/forecast endpoints.
+- `EXPO_PUBLIC_GOOGLE_MAPS_KEY` is required for Google Static Maps image rendering.
+- `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` enable cloud sync from History screen.
+- `EXPO_PUBLIC_WEATHER_PROXY_URL` is optional.
+
+## Run the App
+
+Start the Expo development server:
+
 ```bash
-npm install
-npm start
+npx expo start
 ```
 
-Run options:
-- Press `a` for Android emulator
-- Press `i` for iOS simulator
-- Press `w` for web
-- Or scan QR with Expo Go
+Then run on your preferred target (Android, iOS, or web) from the Expo prompt.
 
-## Repository Structure
-```text
-Skye/
-  App.js
-  app.json
-  package.json
-  .env.example
-  src/
-    components/
-    hooks/
-    screens/
-    constants/
-    services/
-    utils/
-```
+## Tech Stack
 
-## What Is Included for Evaluators
-- Live API data (no static weather stubs)
-- Error handling for invalid cities and request failures
-- In-app candidate details and PM Accelerator description
-- Package/dependency manifest via `package.json` and lockfile
+- React Native + Expo
+- React Navigation (Bottom Tabs + Native Stack)
+- Axios
+- Expo Location
+- Expo SQLite
+- Expo File System
+- Expo Sharing
+- Supabase JavaScript Client
+- AsyncStorage
 
-## Demo Video
-- Add your demo URL before submission:
-  - TO_BE_ADDED_AFTER_RECORDING
+## Troubleshooting
 
-## Submission Checklist (Copy Into Google Form)
+- Missing weather data or API errors:
+	Ensure `EXPO_PUBLIC_OPENWEATHER_API_KEY` is set correctly in `.env`, then restart Expo.
+- Google map image does not render:
+	Confirm `EXPO_PUBLIC_GOOGLE_MAPS_KEY` is set, Google Static Maps API is enabled, and key restrictions allow your app usage.
+- CSV/JSON export sharing does not open:
+	Verify your device/emulator supports share intents and that app permissions are not blocking file access.
+- Environment updates not taking effect:
+	Stop and restart the dev server with a clean cache: `npx expo start --clear`.
 
-Use this block as your quick submission answer:
+## Author
 
-```text
-Candidate Name: EFEMINI TEJIRI
-Assessment Completed: Tech Assessment #1 (Frontend)
-GitHub Repository URL: https://github.com/Welovetj/weather-forecast-ai
-Repository Visibility: Public OR Private with collaborators added (community@pmaccelerator.io, hr@pmaccelerator.io)
-Clone/Download Access: Enabled
-Demo Video URL (1-2 min): TO_BE_ADDED_AFTER_RECORDING
-
-What was built:
-- React Native Expo weather app
-- City search + current location weather
-- Current weather details and 5-day forecast
-- Error handling (city not found / API failure)
-- Theme toggle + temperature unit toggle
-
-How to run:
-1) npm install
-2) Add .env with EXPO_PUBLIC_OPENWEATHER_API_KEY
-3) npm start
-
-Notes:
-- Tech Assessment #2 (backend CRUD/export) is not included in this repository.
-```
+Efemini Tejiri

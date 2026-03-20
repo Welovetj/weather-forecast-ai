@@ -1,48 +1,122 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { HomeScreen, SettingsScreen } from './src/screens';
+import { AboutScreen, HistoryScreen, HomeScreen, SettingsScreen } from './src/screens';
 import { useTemperatureUnit, useTheme } from './src/hooks';
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+const RootStack = createNativeStackNavigator();
+
+const TAB_ICONS = {
+  Home: '🌤',
+  History: '📋',
+  About: 'ℹ️',
+};
 
 export default function App() {
-  const { theme, colors, toggleTheme, themeMode, setThemeMode } = useTheme();
+  const { theme, colors, themeMode, setThemeMode } = useTheme();
   const { unit, setUnit } = useTemperatureUnit();
+
+  const Tabs = () => (
+    <Tab.Navigator
+      screenOptions={({ route, navigation }) => ({
+        headerStyle: {
+          backgroundColor: colors.surface,
+        },
+        headerTintColor: colors.text,
+        headerTitleStyle: {
+          fontWeight: '700',
+        },
+        headerRight: () => (
+          <Pressable
+            onPress={() => navigation.getParent()?.navigate('Settings')}
+            accessibilityRole="button"
+            accessibilityLabel="Open settings"
+            style={{
+              borderWidth: 1,
+              borderColor: theme === 'dark' ? 'rgba(255,255,255,0.16)' : 'rgba(17,24,39,0.12)',
+              backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(17,24,39,0.03)',
+              borderRadius: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 6,
+            }}
+          >
+            <Text style={{ fontSize: 16 }}>⚙️</Text>
+          </Pressable>
+        ),
+        sceneStyle: {
+          backgroundColor: colors.background,
+        },
+        tabBarActiveTintColor: colors.accent,
+        tabBarInactiveTintColor: theme === 'dark' ? 'rgba(243,244,246,0.62)' : 'rgba(17,24,39,0.58)',
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopWidth: 1,
+          borderTopColor: theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(17,24,39,0.08)',
+          height: 64,
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '700',
+        },
+        tabBarIcon: ({ focused }) => (
+          <Text
+            style={{
+              fontSize: focused ? 20 : 18,
+              opacity: focused ? 1 : 0.85,
+            }}
+          >
+            {TAB_ICONS[route.name]}
+          </Text>
+        ),
+      })}
+    >
+      <Tab.Screen name="Home" options={{ title: 'Cloudora' }}>
+        {(props) => (
+          <HomeScreen
+            {...props}
+            theme={theme}
+            colors={colors}
+            unit={unit}
+            setUnit={setUnit}
+          />
+        )}
+      </Tab.Screen>
+
+      <Tab.Screen name="History" options={{ title: 'History' }}>
+        {(props) => (
+          <HistoryScreen
+            {...props}
+            theme={theme}
+            colors={colors}
+          />
+        )}
+      </Tab.Screen>
+
+      <Tab.Screen name="About" options={{ title: 'About' }}>
+        {(props) => (
+          <AboutScreen
+            {...props}
+            theme={theme}
+            colors={colors}
+          />
+        )}
+      </Tab.Screen>
+    </Tab.Navigator>
+  );
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: colors.surface,
-            },
-            headerTintColor: colors.text,
-            headerTitleStyle: {
-              fontWeight: '700',
-            },
-            contentStyle: {
-              backgroundColor: colors.background,
-            },
-          }}
-        >
-          <Stack.Screen name="Home" options={{ title: 'Cloudora' }}>
-            {(props) => (
-              <HomeScreen
-                {...props}
-                theme={theme}
-                colors={colors}
-                unit={unit}
-                setUnit={setUnit}
-              />
-            )}
-          </Stack.Screen>
-
-          <Stack.Screen name="Settings" options={{ title: 'Settings' }}>
+        <RootStack.Navigator screenOptions={{ headerShown: false }}>
+          <RootStack.Screen name="MainTabs" component={Tabs} />
+          <RootStack.Screen name="Settings" options={{ headerShown: true, title: 'Settings' }}>
             {(props) => (
               <SettingsScreen
                 {...props}
@@ -54,8 +128,8 @@ export default function App() {
                 setUnit={setUnit}
               />
             )}
-          </Stack.Screen>
-        </Stack.Navigator>
+          </RootStack.Screen>
+        </RootStack.Navigator>
       </NavigationContainer>
       <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
     </GestureHandlerRootView>
