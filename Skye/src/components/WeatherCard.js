@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Pressable, Linking } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import { GOOGLE_MAPS_KEY } from '../constants/api';
+import { openExternalUrl } from '../utils';
 
 /**
  * WeatherCard Component
@@ -31,12 +32,10 @@ const WeatherCard = ({ weatherData }) => {
   const handleOpenYouTube = async () => {
     const query = encodeURIComponent(`${cityName} weather`);
     const youtubeUrl = `https://www.youtube.com/results?search_query=${query}`;
-
-    try {
-      await Linking.openURL(youtubeUrl);
-    } catch (error) {
-      console.error('Failed to open YouTube URL:', error);
-    }
+    await openExternalUrl(
+      youtubeUrl,
+      `Unable to open YouTube search for ${cityName} on this device.`,
+    );
   };
 
   return (

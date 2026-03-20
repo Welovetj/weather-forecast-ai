@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { openExternalUrl } from '../utils';
 
 const LINKEDIN_URL = 'https://www.linkedin.com/company/product-manager-accelerator';
 
@@ -7,11 +8,10 @@ const AboutScreen = ({ theme, colors }) => {
   const styles = useMemo(() => createStyles(colors, theme), [colors, theme]);
 
   const handleOpenLinkedIn = async () => {
-    try {
-      await Linking.openURL(LINKEDIN_URL);
-    } catch (error) {
-      console.error('Failed to open LinkedIn URL:', error);
-    }
+    await openExternalUrl(
+      LINKEDIN_URL,
+      'Unable to open the PM Accelerator LinkedIn page on this device.',
+    );
   };
 
   return (
