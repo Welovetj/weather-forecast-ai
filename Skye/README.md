@@ -1,6 +1,11 @@
 # Cloudora - AI-Powered Weather App
 
-Built for the PM Accelerator program using React Native and Expo.
+## About PM Accelerator
+Product Manager Accelerator is a global program that breaks down 
+barriers into the tech industry by providing hands-on AI product 
+building experience with a diverse global team. Their mission is 
+to establish 200 schools worldwide and foster diversity in tech.
+🔗 [LinkedIn](https://www.linkedin.com/company/product-manager-accelerator)
 
 ## Overview
 
@@ -114,17 +119,13 @@ CREATE TABLE searches (
   - confirm EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY
   - confirm searches table exists and allows inserts/upserts
 
-## PM Accelerator Submission Notes
 
-To align with assessment requirements:
-
-- Include GitHub link and this README with run instructions
-- Keep repository public during evaluation, or add:
-  - community@pmaccelerator.io
-  - hr@pmaccelerator.io
-- Ensure Clone/Download is allowed
 - Keep requirements file included (`requirements.txt`)
 
 ## Author
 
 Efemini Tejiri
+
+
+
+## Demo Video
