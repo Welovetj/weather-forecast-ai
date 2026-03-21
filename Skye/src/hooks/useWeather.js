@@ -6,6 +6,8 @@ import {
   FORECAST_API_URL,
   WEATHER_PROXY_URL,
   API_TIMEOUT,
+  hasWeatherApiKeyConfigured,
+  isLikelyOpenWeatherApiKey,
 } from '../constants/api';
 
 /**
@@ -36,11 +38,21 @@ const useWeather = (city, units = 'metric') => {
 
       const shouldUseProxy = Boolean(WEATHER_PROXY_URL);
 
-      if (!shouldUseProxy && (!WEATHER_API_KEY || WEATHER_API_KEY === 'YOUR_API_KEY_HERE')) {
+      if (!shouldUseProxy && !hasWeatherApiKeyConfigured) {
         if (isMounted) {
           setWeatherData(null);
           setForecastData(null);
           setError('OpenWeather API key is missing. Set EXPO_PUBLIC_OPENWEATHER_API_KEY in .env or configure EXPO_PUBLIC_WEATHER_PROXY_URL.');
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (!shouldUseProxy && !isLikelyOpenWeatherApiKey()) {
+        if (isMounted) {
+          setWeatherData(null);
+          setForecastData(null);
+          setError('OpenWeather API key format looks invalid. Use a 32-character key from OpenWeather, then restart Expo with --clear.');
           setLoading(false);
         }
         return;
@@ -87,7 +99,12 @@ const useWeather = (city, units = 'metric') => {
         }
 
         if (isMounted) {
-          setError(err.response?.data?.message || err.message || 'Failed to fetch weather data');
+          const apiMessage = err.response?.data?.message || err.message || 'Failed to fetch weather data';
+          if (/invalid api key/i.test(apiMessage)) {
+            setError('OpenWeather rejected your API key (401). Confirm the key is active in OpenWeather, then restart Expo with --clear.');
+          } else {
+            setError(apiMessage);
+          }
           setWeatherData(null);
           setForecastData(null);
         }
