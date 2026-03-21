@@ -19,6 +19,7 @@
     "@supabase/supabase-js": "^2.49.8",
     "axios": "^1.6.0",
     "expo": "~54.0.33",
+    "@expo/vector-icons": "^14.0.0",
     "expo-file-system": "~19.0.21",
     "expo-linear-gradient": "~15.0.8",
     "expo-location": "~19.0.8",
