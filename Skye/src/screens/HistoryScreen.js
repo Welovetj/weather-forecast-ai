@@ -314,8 +314,47 @@ const HistoryScreen = ({ theme, colors }) => {
         )}
         ListEmptyComponent={(
           <View style={styles.emptyCard}>
-            <Text style={styles.emptyTitle}>No Saved Searches</Text>
-            <Text style={styles.emptyText}>Your historical weather searches will appear here.</Text>
+            <Text style={styles.emptyIcon}>🗂️</Text>
+            <Text style={styles.emptyTitle}>No Saved Searches Yet</Text>
+            <Text style={styles.emptySubtitle}>Searches are saved automatically when you look up weather. Here's how:</Text>
+
+            <View style={styles.stepList}>
+              <View style={styles.stepRow}>
+                <View style={styles.stepBadge}><Text style={styles.stepNum}>1</Text></View>
+                <View style={styles.stepBody}>
+                  <Text style={styles.stepHeading}>Go to the Home tab</Text>
+                  <Text style={styles.stepDetail}>Tap the 🌤 Home tab at the bottom of the screen.</Text>
+                </View>
+              </View>
+
+              <View style={styles.stepRow}>
+                <View style={styles.stepBadge}><Text style={styles.stepNum}>2</Text></View>
+                <View style={styles.stepBody}>
+                  <Text style={styles.stepHeading}>Search for a city</Text>
+                  <Text style={styles.stepDetail}>Type any city name (e.g. "Calgary") into the search bar and press Search.</Text>
+                </View>
+              </View>
+
+              <View style={styles.stepRow}>
+                <View style={styles.stepBadge}><Text style={styles.stepNum}>3</Text></View>
+                <View style={styles.stepBody}>
+                  <Text style={styles.stepHeading}>Wait for weather to load</Text>
+                  <Text style={styles.stepDetail}>Once the weather data appears, it is automatically saved to your history.</Text>
+                </View>
+              </View>
+
+              <View style={styles.stepRow}>
+                <View style={styles.stepBadge}><Text style={styles.stepNum}>4</Text></View>
+                <View style={styles.stepBody}>
+                  <Text style={styles.stepHeading}>Come back here</Text>
+                  <Text style={styles.stepDetail}>Return to the 📋 History tab and your search record will appear here.</Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.emptyTipBox}>
+              <Text style={styles.emptyTipText}>💡 Tip: You can also use the locate button (📍) on the Home screen to auto-detect your city and save it.</Text>
+            </View>
           </View>
         )}
       />
@@ -515,14 +554,25 @@ const createStyles = (colors, theme) =>
       borderRadius: 16,
       borderWidth: 1,
       borderColor: theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(17,24,39,0.08)',
-      padding: 16,
-      alignItems: 'center',
-      gap: 8,
+      padding: 20,
+      gap: 12,
+    },
+    emptyIcon: {
+      fontSize: 40,
+      textAlign: 'center',
     },
     emptyTitle: {
       color: colors.text,
-      fontSize: 18,
-      fontWeight: '700',
+      fontSize: 20,
+      fontWeight: '800',
+      textAlign: 'center',
+    },
+    emptySubtitle: {
+      color: colors.text,
+      opacity: 0.72,
+      fontSize: 14,
+      textAlign: 'center',
+      lineHeight: 20,
     },
     emptyText: {
       color: colors.text,
@@ -530,6 +580,59 @@ const createStyles = (colors, theme) =>
       fontSize: 14,
       textAlign: 'center',
       lineHeight: 20,
+    },
+    stepList: {
+      gap: 14,
+      marginTop: 4,
+    },
+    stepRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: 12,
+    },
+    stepBadge: {
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      backgroundColor: colors.accent,
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0,
+      marginTop: 1,
+    },
+    stepNum: {
+      color: '#FFFFFF',
+      fontWeight: '800',
+      fontSize: 13,
+    },
+    stepBody: {
+      flex: 1,
+      gap: 2,
+    },
+    stepHeading: {
+      color: colors.text,
+      fontWeight: '700',
+      fontSize: 15,
+    },
+    stepDetail: {
+      color: colors.text,
+      opacity: 0.72,
+      fontSize: 13,
+      lineHeight: 19,
+    },
+    emptyTipBox: {
+      backgroundColor: theme === 'dark' ? 'rgba(14,165,233,0.12)' : 'rgba(14,165,233,0.08)',
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: theme === 'dark' ? 'rgba(125,211,252,0.28)' : 'rgba(14,165,233,0.24)',
+      padding: 12,
+      marginTop: 4,
+    },
+    emptyTipText: {
+      color: theme === 'dark' ? '#BAE6FD' : '#0C4A6E',
+      fontSize: 13,
+      lineHeight: 19,
+      fontWeight: '500',
     },
     centerState: {
       flex: 1,

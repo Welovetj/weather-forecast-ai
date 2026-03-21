@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Animated,
   Easing,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -20,6 +21,9 @@ import {
   removeFavoriteCity,
 } from '../services/storageService';
 import { getCurrentWeatherByCity } from '../services/weatherService';
+import { GOOGLE_MAPS_KEY } from '../constants/api';
+import { insertSearch } from '../utils/database';
+import { openExternalUrl } from '../utils';
 
 const AnimatedWeatherIcon = Animated.createAnimatedComponent(MaterialCommunityIcons);
 
@@ -585,6 +589,32 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
     outputRange: [0, 18],
   });
 
+  const lastSavedDt = useRef(null);
+
+  useEffect(() => {
+    if (!weatherData?.dt) {
+      return;
+    }
+
+    if (weatherData.dt === lastSavedDt.current) {
+      return;
+    }
+
+    lastSavedDt.current = weatherData.dt;
+
+    insertSearch({
+      location: weatherData.name ?? null,
+      latitude: weatherData.coord?.lat ?? null,
+      longitude: weatherData.coord?.lon ?? null,
+      temp_min: weatherData.main?.temp_min ?? weatherData.main?.temp ?? null,
+      temp_max: weatherData.main?.temp_max ?? weatherData.main?.temp ?? null,
+      condition: weatherData.weather?.[0]?.description ?? null,
+      unit: unit ?? 'metric',
+    }).catch((err) => {
+      console.warn('Failed to save search history:', err?.message || err);
+    });
+  }, [weatherData, unit]);
+
   const handleSearch = (searchedCity) => {
     setHasManualSelection(true);
     setCityQuery(searchedCity);
@@ -926,6 +956,42 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
                 ))}
               </View>
             </View>
+
+            {(() => {
+              const lat = weatherData?.coord?.lat;
+              const lon = weatherData?.coord?.lon;
+              if (typeof lat !== 'number' || typeof lon !== 'number' || !GOOGLE_MAPS_KEY) {
+                return null;
+              }
+              const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lon}&zoom=11&size=600x200&maptype=roadmap&key=${GOOGLE_MAPS_KEY}`;
+              return (
+                <View style={styles.sectionBlock}>
+                  <Text style={styles.sectionLabel}>Location map</Text>
+                  <Image
+                    source={{ uri: mapUrl }}
+                    style={styles.mapImage}
+                    resizeMode="cover"
+                    accessibilityLabel={`Map of ${weatherData?.name}`}
+                  />
+                </View>
+              );
+            })()}
+
+            <Pressable
+              onPress={async () => {
+                const city = weatherData?.name || 'weather';
+                const query = encodeURIComponent(`${city} weather`);
+                await openExternalUrl(
+                  `https://www.youtube.com/results?search_query=${query}`,
+                  `Unable to open YouTube search for ${city} on this device.`,
+                );
+              }}
+              style={[styles.youtubeButton, { backgroundColor: glassSurface(theme), borderColor: glassBorder(theme) }]}
+              accessibilityRole="button"
+              accessibilityLabel={`Watch ${weatherData?.name} weather on YouTube`}
+            >
+              <Text style={styles.youtubeButtonText}>{`▶ Watch ${weatherData?.name || 'this city'} on YouTube`}</Text>
+            </Pressable>
           </>
         ) : null}
       </ScrollView>
@@ -1409,6 +1475,24 @@ const createStyles = (colors, theme) =>
       color: '#FFFFFF',
       fontSize: 18,
       fontWeight: '800',
+    },
+    mapImage: {
+      width: '100%',
+      height: 160,
+      borderRadius: 16,
+      backgroundColor: 'rgba(255,255,255,0.08)',
+    },
+    youtubeButton: {
+      borderRadius: 16,
+      borderWidth: 1,
+      paddingVertical: 14,
+      alignItems: 'center',
+      marginTop: 4,
+    },
+    youtubeButtonText: {
+      color: '#F8FAFC',
+      fontWeight: '700',
+      fontSize: 15,
     },
   });
 

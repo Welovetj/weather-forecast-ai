@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const UNIT_STORAGE_KEY = '@skye_unit';
+const UNIT_STORAGE_KEY = '@cloudora_unit';
 
 const useTemperatureUnit = () => {
   const [unit, setUnitState] = useState('metric');

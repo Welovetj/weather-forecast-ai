@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,9 +13,9 @@ const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
 
 const TAB_ICONS = {
-  Home: '🌤',
-  History: '📋',
-  About: 'ℹ️',
+  Home: 'weather-partly-cloudy',
+  History: 'history',
+  About: 'information-outline',
 };
 
 export default function App() {
@@ -65,15 +66,12 @@ export default function App() {
           fontSize: 12,
           fontWeight: '700',
         },
-        tabBarIcon: ({ focused }) => (
-          <Text
-            style={{
-              fontSize: focused ? 20 : 18,
-              opacity: focused ? 1 : 0.85,
-            }}
-          >
-            {TAB_ICONS[route.name]}
-          </Text>
+        tabBarIcon: ({ focused, color }) => (
+          <MaterialCommunityIcons
+            name={TAB_ICONS[route.name]}
+            size={focused ? 26 : 23}
+            color={color}
+          />
         ),
       })}
     >

@@ -1,9 +1,9 @@
-# Skye Weather App - Folder Structure
+# Cloudora Weather App - Folder Structure
 
 ## Directory Organization
 
 ```
-Skye/
+Cloudora/
 ├── src/
 │   ├── components/              # Reusable UI components
 │   │   ├── index.js

@@ -6,10 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  */
 
 const STORAGE_KEYS = {
-  LAST_LOCATION: '@skye_last_location',
-  USER_PREFERENCES: '@skye_preferences',
-  FAVORITE_CITIES: '@skye_favorite_cities',
-  STYLIST_MODE: '@skye_stylist_mode',
+  LAST_LOCATION: '@cloudora_last_location',
+  USER_PREFERENCES: '@cloudora_preferences',
+  FAVORITE_CITIES: '@cloudora_favorite_cities',
+  STYLIST_MODE: '@cloudora_stylist_mode',
 };
 
 const normalizeCities = (cities) => {

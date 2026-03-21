@@ -3,7 +3,7 @@
  */
 
 export const APP_CONFIG = {
-  name: 'Skye',
+  name: 'Cloudora',
   version: '1.0.0',
   minTempUnit: 'C', // or 'F'
   speedUnit: 'km/h', // or 'mph'
