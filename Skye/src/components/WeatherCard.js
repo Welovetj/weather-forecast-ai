@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GOOGLE_MAPS_KEY } from '../constants/api';
 import { openExternalUrl } from '../utils';
 
@@ -68,9 +69,12 @@ const WeatherCard = ({ weatherData }) => {
         onPress={handleOpenYouTube}
         style={styles.youtubeButton}
         accessibilityRole="button"
-        accessibilityLabel={`Watch ${cityName} weather on YouTube`}
+        accessibilityLabel={`Get to know about ${cityName} on YouTube`}
       >
-        <Text style={styles.youtubeButtonText}>{`▶ Watch ${cityName} on YouTube`}</Text>
+        <View style={styles.youtubeButtonRow}>
+          <MaterialCommunityIcons name="youtube" size={17} color="#FF4D4F" />
+          <Text style={styles.youtubeButtonText}>{`Get to know about ${cityName} on YouTube`}</Text>
+        </View>
       </Pressable>
     </View>
   );
@@ -130,6 +134,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  youtubeButtonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
   youtubeButtonText: {
     color: '#FEE2E2',

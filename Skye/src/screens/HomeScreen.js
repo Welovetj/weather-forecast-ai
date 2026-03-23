@@ -677,7 +677,7 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <View style={styles.headerRow}>
           <View>
-            <Text style={styles.brandEyebrow}>CLOUDORA</Text>
+            <Text style={styles.brandEyebrow}>CLOUDORA AI</Text>
             <Text style={styles.headerTitle}>Forecasts with a sharper point of view.</Text>
           </View>
           <Pressable
@@ -802,26 +802,10 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
               </View>
             </LinearGradient>
 
-            <View style={styles.sectionBlock}>
-              <Text style={styles.sectionLabel}>Quick insight</Text>
-              <View style={styles.chipGrid}>
-                {insightChips.map((chip) => (
-                  <View
-                    key={chip.key}
-                    style={[styles.infoChip, { backgroundColor: glassSurface(theme), borderColor: glassBorder(theme) }]}
-                  >
-                    <Text style={styles.infoChipLabel}>{chip.label}</Text>
-                    <Text style={styles.infoChipValue}>{chip.value}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-
             {fitGuide ? (
               <View style={[styles.glassCard, { backgroundColor: glassSurface(theme), borderColor: glassBorder(theme) }]}>
                 <View style={styles.fitHeaderRow}>
                   <View>
-                    <Text style={styles.cardEyebrow}>CLOUDORA AI</Text>
                     <Text style={styles.sectionTitle}>Today's Fit</Text>
                   </View>
                   <MaterialCommunityIcons name={fitGuide.icon} size={40} color="#E0F2FE" />
@@ -841,6 +825,21 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
                 </View>
               </View>
             ) : null}
+
+            <View style={styles.sectionBlock}>
+              <Text style={styles.sectionLabel}>Quick insight</Text>
+              <View style={styles.chipGrid}>
+                {insightChips.map((chip) => (
+                  <View
+                    key={chip.key}
+                    style={[styles.infoChip, { backgroundColor: glassSurface(theme), borderColor: glassBorder(theme) }]}
+                  >
+                    <Text style={styles.infoChipLabel}>{chip.label}</Text>
+                    <Text style={styles.infoChipValue}>{chip.value}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
 
             <View style={styles.sectionBlock}>
               <Text style={styles.sectionLabel}>City compare</Text>
@@ -988,9 +987,12 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
               }}
               style={[styles.youtubeButton, { backgroundColor: glassSurface(theme), borderColor: glassBorder(theme) }]}
               accessibilityRole="button"
-              accessibilityLabel={`Watch ${weatherData?.name} weather on YouTube`}
+              accessibilityLabel={`Get to know about ${weatherData?.name || 'this city'} on YouTube`}
             >
-              <Text style={styles.youtubeButtonText}>{`▶ Watch ${weatherData?.name || 'this city'} on YouTube`}</Text>
+              <View style={styles.youtubeButtonRow}>
+                <MaterialCommunityIcons name="youtube" size={18} color="#FF4D4F" />
+                <Text style={styles.youtubeButtonText}>{`Get to know about ${weatherData?.name || 'this city'} on YouTube`}</Text>
+              </View>
             </Pressable>
           </>
         ) : null}
@@ -1488,6 +1490,12 @@ const createStyles = (colors, theme) =>
       paddingVertical: 14,
       alignItems: 'center',
       marginTop: 4,
+    },
+    youtubeButtonRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
     },
     youtubeButtonText: {
       color: '#F8FAFC',
