@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -20,9 +20,9 @@ import {
   moveFavoriteCity,
   removeFavoriteCity,
 } from '../services/storageService';
-import { getCurrentWeatherByCity } from '../services/weatherService';
+import { fetchCitySuggestions, getCurrentWeatherByCity } from '../services/weatherService';
 import { GOOGLE_MAPS_KEY } from '../constants/api';
-import { insertSearch } from '../utils/database';
+import { getRecentLocations, insertSearch } from '../utils/database';
 import { openExternalUrl } from '../utils';
 
 const AnimatedWeatherIcon = Animated.createAnimatedComponent(MaterialCommunityIcons);
@@ -480,6 +480,7 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
   const [cityQuery, setCityQuery] = useState('');
   const [hasManualSelection, setHasManualSelection] = useState(false);
   const [favoriteCities, setFavoriteCities] = useState([]);
+  const [recentSearches, setRecentSearches] = useState([]);
   const [compareCities, setCompareCities] = useState([]);
   const [favoritesLoading, setFavoritesLoading] = useState(false);
   const floatValue = useRef(new Animated.Value(0)).current;
@@ -509,6 +510,19 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
       .then(setFavoriteCities)
       .catch(() => setFavoriteCities([]));
   }, []);
+
+  const loadRecentSearches = useCallback(async () => {
+    try {
+      const locations = await getRecentLocations(8);
+      setRecentSearches(Array.isArray(locations) ? locations : []);
+    } catch (error) {
+      setRecentSearches([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadRecentSearches();
+  }, [loadRecentSearches]);
 
   useEffect(() => {
     if (favoriteCities.length === 0) {
@@ -602,18 +616,27 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
 
     lastSavedDt.current = weatherData.dt;
 
+    // Get today's date in ISO format
+    const today = new Date().toISOString().split('T')[0];
+
     insertSearch({
       location: weatherData.name ?? null,
       latitude: weatherData.coord?.lat ?? null,
       longitude: weatherData.coord?.lon ?? null,
+      date_from: today,
+      date_to: today,
       temp_min: weatherData.main?.temp_min ?? weatherData.main?.temp ?? null,
       temp_max: weatherData.main?.temp_max ?? weatherData.main?.temp ?? null,
       condition: weatherData.weather?.[0]?.description ?? null,
       unit: unit ?? 'metric',
-    }).catch((err) => {
-      console.warn('Failed to save search history:', err?.message || err);
-    });
-  }, [weatherData, unit]);
+    })
+      .then(() => {
+        loadRecentSearches();
+      })
+      .catch((err) => {
+        console.warn('Failed to save search history:', err?.message || err);
+      });
+  }, [weatherData, unit, loadRecentSearches]);
 
   const handleSearch = (searchedCity) => {
     setHasManualSelection(true);
@@ -655,6 +678,10 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
     setFavoriteCities(nextCities);
   };
 
+  const handleFetchSuggestions = useCallback(async (query) => {
+    return fetchCitySuggestions(query, 6);
+  }, []);
+
   return (
     <LinearGradient colors={visualPalette.background} style={styles.gradientShell}>
       <Animated.View
@@ -693,6 +720,8 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
         <SearchBar
           onSearch={handleSearch}
           onLocate={handleLocate}
+          fetchSuggestions={handleFetchSuggestions}
+          recentSearches={recentSearches}
           placeholder="Search by city"
           theme={theme}
           colors={colors}

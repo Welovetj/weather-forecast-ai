@@ -8,6 +8,8 @@ import {
   isLikelyOpenWeatherApiKey,
 } from '../constants/api';
 
+const OPEN_METEO_GEOCODE_URL = 'https://geocoding-api.open-meteo.com/v1/search';
+
 /**
  * Weather Service
  * Handles all API calls related to weather data
@@ -90,5 +92,46 @@ export const getForecast = async (latitude, longitude) => {
       throw new Error('OpenWeather rejected your API key (401). Confirm the key is active in OpenWeather.');
     }
     throw new Error('Failed to fetch forecast data');
+  }
+};
+
+export const fetchCitySuggestions = async (query, limit = 6) => {
+  const normalizedQuery = String(query || '').trim();
+  if (!normalizedQuery || normalizedQuery.length < 2) {
+    return [];
+  }
+
+  const safeLimit = Number.isInteger(limit) && limit > 0 ? Math.min(limit, 10) : 6;
+
+  try {
+    const response = await axios.get(OPEN_METEO_GEOCODE_URL, {
+      params: {
+        name: normalizedQuery,
+        count: safeLimit,
+        language: 'en',
+        format: 'json',
+      },
+      timeout: API_TIMEOUT,
+    });
+
+    const results = Array.isArray(response?.data?.results) ? response.data.results : [];
+
+    return results.map((item) => {
+      const name = item?.name ? String(item.name).trim() : '';
+      const admin = item?.admin1 ? String(item.admin1).trim() : '';
+      const country = item?.country ? String(item.country).trim() : '';
+      const countryCode = item?.country_code ? String(item.country_code).trim().toUpperCase() : '';
+
+      const labelParts = [name, admin, country].filter(Boolean);
+      const queryValue = [name, countryCode].filter(Boolean).join(', ');
+
+      return {
+        id: String(item?.id || `${name}-${countryCode}-${admin}`),
+        label: labelParts.join(', '),
+        value: queryValue || name,
+      };
+    }).filter((item) => item.label && item.value);
+  } catch (error) {
+    return [];
   }
 };

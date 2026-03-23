@@ -125,6 +125,32 @@ export const getAllSearches = async () => {
   `);
 };
 
+export const getRecentLocations = async (limit = 8) => {
+  await initDB();
+  const db = await getDB();
+
+  const safeLimit = Number.isInteger(limit) && limit > 0 ? limit : 8;
+
+  const rows = await db.getAllAsync(
+    `
+      SELECT
+        location,
+        MAX(datetime(created_at)) AS latest_created_at
+      FROM ${TABLE_NAME}
+      WHERE location IS NOT NULL
+        AND TRIM(location) <> ''
+      GROUP BY LOWER(TRIM(location))
+      ORDER BY latest_created_at DESC
+      LIMIT ?;
+    `,
+    safeLimit,
+  );
+
+  return (Array.isArray(rows) ? rows : [])
+    .map((row) => (typeof row?.location === 'string' ? row.location.trim() : ''))
+    .filter(Boolean);
+};
+
 export const updateSearch = async (id, data) => {
   await initDB();
   const db = await getDB();
