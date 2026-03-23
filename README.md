@@ -1,6 +1,6 @@
 # Cloudora Weather App (PM Accelerator Technical Assessment)
 
-   Demo video: https://drive.google.com/file/d/1GOr_XV-uhuQ4KkQN9aJssxX3-ZpSPdLg/view?usp=sharing
+   Demo video: https://drive.google.com/file/d/1hP4PKmy9woIY0GjZgtwZJTNZir1HT3YQ/view?usp=sharing
 
 This repository contains my PM Accelerator technical assessment submission.
 
