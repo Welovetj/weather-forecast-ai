@@ -51,6 +51,16 @@ export const initDB = async () => {
       created_at TEXT
     );
   `);
+
+  await db.execAsync(`
+    CREATE INDEX IF NOT EXISTS idx_searches_created_at
+    ON ${TABLE_NAME}(created_at DESC);
+  `);
+
+  await db.execAsync(`
+    CREATE INDEX IF NOT EXISTS idx_searches_location
+    ON ${TABLE_NAME}(location);
+  `);
 };
 
 export const insertSearch = async (data) => {
@@ -103,11 +113,14 @@ export const insertSearch = async (data) => {
   return result.lastInsertRowId;
 };
 
-export const getAllSearches = async () => {
+export const getAllSearches = async (options = {}) => {
   await initDB();
   const db = await getDB();
 
-  return db.getAllAsync(`
+  const { limit } = options || {};
+  const hasLimit = Number.isInteger(limit) && limit > 0;
+
+  const baseQuery = `
     SELECT
       id,
       location,
@@ -121,8 +134,14 @@ export const getAllSearches = async () => {
       unit,
       created_at
     FROM ${TABLE_NAME}
-    ORDER BY datetime(created_at) DESC;
-  `);
+    ORDER BY created_at DESC
+  `;
+
+  if (hasLimit) {
+    return db.getAllAsync(`${baseQuery}\nLIMIT ?;`, limit);
+  }
+
+  return db.getAllAsync(`${baseQuery};`);
 };
 
 export const getRecentLocations = async (limit = 8) => {
@@ -135,7 +154,7 @@ export const getRecentLocations = async (limit = 8) => {
     `
       SELECT
         location,
-        MAX(datetime(created_at)) AS latest_created_at
+        MAX(created_at) AS latest_created_at
       FROM ${TABLE_NAME}
       WHERE location IS NOT NULL
         AND TRIM(location) <> ''

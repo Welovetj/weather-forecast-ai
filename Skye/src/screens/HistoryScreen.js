@@ -77,7 +77,7 @@ const HistoryScreen = ({ theme, colors }) => {
   const loadHistory = useCallback(async () => {
     try {
       setError('');
-      const rows = await getAllSearches();
+      const rows = await getAllSearches({ limit: 300 });
       setSearches(Array.isArray(rows) ? rows : []);
     } catch (err) {
       setError(err?.message || 'Failed to load search history.');

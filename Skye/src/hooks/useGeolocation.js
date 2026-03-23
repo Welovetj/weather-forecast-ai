@@ -7,7 +7,9 @@ const useGeolocation = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const refreshLocation = useCallback(async () => {
+  const refreshLocation = useCallback(async (options = {}) => {
+    const { silentOnPermissionDenied = false } = options;
+
     try {
       setLoading(true);
       setError(null);
@@ -15,7 +17,9 @@ const useGeolocation = () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status !== 'granted') {
-        setError('Location permission was denied');
+        if (!silentOnPermissionDenied) {
+          setError('Location permission was denied');
+        }
         setCoords(null);
         setCityName(null);
         setLoading(false);
@@ -55,7 +59,7 @@ const useGeolocation = () => {
         return;
       }
 
-      await refreshLocation();
+      await refreshLocation({ silentOnPermissionDenied: true });
     };
 
     loadInitialLocation();

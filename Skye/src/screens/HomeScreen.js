@@ -585,7 +585,9 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
 
   const loading = (locationLoading && !cityQuery) || weatherLoading;
   const isCityNotFound = typeof weatherError === 'string' && weatherError.toLowerCase().includes('city not found');
-  const activeError = weatherError || locationError;
+  const isLocationDenied =
+    typeof locationError === 'string' && locationError.toLowerCase().includes('permission was denied');
+  const activeError = weatherError || null;
   const styles = useMemo(() => createStyles(colors, theme), [colors, theme]);
   const visualPalette = useMemo(() => getWeatherPalette(weatherData, theme), [weatherData, theme]);
   const fitGuide = useMemo(() => getTodayFit(weatherData, unit), [weatherData, unit]);
@@ -726,6 +728,14 @@ const HomeScreen = ({ navigation, theme, colors, unit, setUnit }) => {
           theme={theme}
           colors={colors}
         />
+
+        {!loading && isLocationDenied ? (
+          <View style={styles.locationNoticeCard}>
+            <Text style={styles.locationNoticeText}>
+              Location access is off. You can still search any city, or enable location permission in phone settings.
+            </Text>
+          </View>
+        ) : null}
 
         <View style={styles.controlsRow}>
           <UnitToggle unit={unit} onToggle={setUnit} theme={theme} colors={colors} />
@@ -1159,6 +1169,19 @@ const createStyles = (colors, theme) =>
       color: '#7F1D1D',
       fontSize: 14,
       lineHeight: 20,
+    },
+    locationNoticeCard: {
+      borderRadius: 14,
+      borderWidth: 1,
+      borderColor: 'rgba(125, 211, 252, 0.55)',
+      backgroundColor: 'rgba(2, 132, 199, 0.22)',
+      paddingHorizontal: 14,
+      paddingVertical: 10,
+    },
+    locationNoticeText: {
+      color: '#E0F2FE',
+      fontSize: 13,
+      lineHeight: 18,
     },
     heroCard: {
       borderRadius: 28,
